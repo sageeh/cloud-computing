@@ -12,7 +12,6 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-// Safely get brokers
 func GetBrokers() []string {
 	brokerStr := os.Getenv("KAFKA_BROKERS")
 	if brokerStr == "" {
@@ -22,8 +21,6 @@ func GetBrokers() []string {
 	return strings.Split(brokerStr, ",")
 }
 
-// GetTLSConfig reads our PEM files and packages them into a Go TLS Object.
-// It is capitalized so it can be exported and used by main.go!
 func GetTLSConfig() *tls.Config {
 	certFile := os.Getenv("SSL_CERT_FILE")
 	keyFile := os.Getenv("SSL_KEY_FILE")
@@ -64,11 +61,10 @@ func InitKafkaTopic() {
 	dialer := &kafka.Dialer{
 		Timeout:   10 * time.Second,
 		DualStack: true,
-		TLS:       GetTLSConfig(), // Attach the SSL certificates here!
+		TLS:       GetTLSConfig(),
 	}
 
 	for i := 1; i <= 7; i++ {
-		// Use the secure dialer instead of the default kafka.Dial
 		conn, err = dialer.Dial("tcp", brokers[0])
 		if err == nil {
 			break

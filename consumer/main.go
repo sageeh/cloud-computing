@@ -24,7 +24,7 @@ type Order struct {
 func GetBrokers() []string {
 	brokerStr := os.Getenv("KAFKA_BROKERS")
 	if brokerStr == "" {
-		fmt.Println("⚠️ Running locally without Docker env vars, defaulting to localhost ports")
+		fmt.Println("Running locally without Docker env vars, defaulting to localhost ports")
 		return []string{"localhost:29092", "localhost:39092", "localhost:49092"}
 	}
 	return strings.Split(brokerStr, ",")
@@ -85,7 +85,7 @@ func main() {
 		Topic:    "orders-topic",
 		MinBytes: 10e3,   // 10KB
 		MaxBytes: 10e6,   // 10MB
-		Dialer:   dialer, // reader to use our secure dialer
+		Dialer:   dialer, 
 	})
 	defer reader.Close()
 

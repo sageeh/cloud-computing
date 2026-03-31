@@ -22,10 +22,10 @@ type Order struct {
 	Quantity int    `json:"quantity"`
 }
 
-// App struct holds our global dependencies
+// App struct holds global dependencies
 type App struct {
 	DB        *sql.DB
-	Transport *kafka.Transport // Holds our secure SSL configuration
+	Transport *kafka.Transport // Holds secure SSL configuration
 }
 
 // The HTTP Handler
@@ -40,8 +40,6 @@ func (app *App) createOrderHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
-
-	// --- 1. Database Logic ---
 	_, err := app.DB.Exec("INSERT INTO orders (id, item, quantity, status) VALUES ($1, $2, $3, 'PENDING')",
 		order.ID, order.Item, order.Quantity)
 
@@ -50,9 +48,8 @@ func (app *App) createOrderHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to process order (Database Error)", http.StatusInternalServerError)
 		return
 	}
-	fmt.Printf("📦 Order %s saved to database as PENDING.\n", order.ID)
+	fmt.Printf("Order %s saved to database as PENDING.\n", order.ID)
 
-	// --- 2. Secure Kafka Logic ---
 	writer := &kafka.Writer{
 		Addr:         kafka.TCP(TopicCreater.GetBrokers()...),
 		Topic:        "orders-topic",
@@ -82,9 +79,8 @@ func (app *App) createOrderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// ---> 1. LOAD THE .ENV FILE FIRST <---
 	if err := godotenv.Load(); err != nil {
-		log.Println("⚠️ No .env file found, relying on system environment variables")
+		log.Println("No .env file found, relying on system environment variables")
 	}
 
 	db, err := database.ConnectToDB()
@@ -104,7 +100,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to create table:", err)
 	}
-	fmt.Println("✅ Orders table is ready.")
+	fmt.Println("Orders table is ready.")
 
 	secureTransport := &kafka.Transport{
 		TLS: TopicCreater.GetTLSConfig(),
