@@ -1,0 +1,234 @@
+services:
+  controller-1:
+    image: apache/kafka:latest
+    container_name: controller-1
+    environment:
+      CLUSTER_ID: 'OrderSystemCluster123'
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_LISTENERS: CONTROLLER://:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: SSL_INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,SSL_INTERNAL:SSL,SSL_EXTERNAL:SSL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:9093,2@controller-2:9093,3@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  controller-2:
+    image: apache/kafka:latest
+    container_name: controller-2
+    environment:
+      CLUSTER_ID: 'OrderSystemCluster123'
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_LISTENERS: CONTROLLER://:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: SSL_INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,SSL_INTERNAL:SSL,SSL_EXTERNAL:SSL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:9093,2@controller-2:9093,3@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  controller-3:
+    image: apache/kafka:latest
+    container_name: controller-3
+    environment:
+      CLUSTER_ID: 'OrderSystemCluster123'
+      KAFKA_NODE_ID: 3
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_LISTENERS: CONTROLLER://:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: SSL_INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,SSL_INTERNAL:SSL,SSL_EXTERNAL:SSL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:9093,2@controller-2:9093,3@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+  broker-1:
+    image: apache/kafka:latest
+    container_name: broker-1
+    ports:
+      - 29092:9092
+    environment:
+      CLUSTER_ID: 'OrderSystemCluster123'
+      KAFKA_NODE_ID: 4
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'SSL_INTERNAL://:19092,SSL_EXTERNAL://:9092'
+      KAFKA_ADVERTISED_LISTENERS: 'SSL_INTERNAL://broker-1:19092,SSL_EXTERNAL://localhost:29092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: SSL_INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,SSL_INTERNAL:SSL,SSL_EXTERNAL:SSL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:9093,2@controller-2:9093,3@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_SSL_KEYSTORE_TYPE: JKS
+      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: password123
+      KAFKA_SSL_KEY_PASSWORD: password123
+      KAFKA_SSL_TRUSTSTORE_TYPE: JKS
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.truststore.jks
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: password123
+      KAFKA_SSL_CLIENT_AUTH: required
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./secrets:/etc/kafka/secrets
+
+  broker-2:
+    image: apache/kafka:latest
+    container_name: broker-2
+    ports:
+      - 39092:9092
+    environment:
+      CLUSTER_ID: 'OrderSystemCluster123'
+      KAFKA_NODE_ID: 5
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'SSL_INTERNAL://:19092,SSL_EXTERNAL://:9092'
+      KAFKA_ADVERTISED_LISTENERS: 'SSL_INTERNAL://broker-2:19092,SSL_EXTERNAL://localhost:39092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: SSL_INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,SSL_INTERNAL:SSL,SSL_EXTERNAL:SSL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:9093,2@controller-2:9093,3@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_SSL_KEYSTORE_TYPE: JKS
+      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: password123
+      KAFKA_SSL_KEY_PASSWORD: password123
+      KAFKA_SSL_TRUSTSTORE_TYPE: JKS
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.truststore.jks
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: password123
+      KAFKA_SSL_CLIENT_AUTH: required
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./secrets:/etc/kafka/secrets
+
+  broker-3:
+    image: apache/kafka:latest
+    container_name: broker-3
+    ports:
+      - 49092:9092
+    environment:
+      CLUSTER_ID: 'OrderSystemCluster123'
+      KAFKA_NODE_ID: 6
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_LISTENERS: 'SSL_INTERNAL://:19092,SSL_EXTERNAL://:9092'
+      KAFKA_ADVERTISED_LISTENERS: 'SSL_INTERNAL://broker-3:19092,SSL_EXTERNAL://localhost:49092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: SSL_INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,SSL_INTERNAL:SSL,SSL_EXTERNAL:SSL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:9093,2@controller-2:9093,3@controller-3:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_SSL_KEYSTORE_TYPE: JKS
+      KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.keystore.jks
+      KAFKA_SSL_KEYSTORE_PASSWORD: password123
+      KAFKA_SSL_KEY_PASSWORD: password123
+      KAFKA_SSL_TRUSTSTORE_TYPE: JKS
+      KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.truststore.jks
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: password123
+      KAFKA_SSL_CLIENT_AUTH: required
+    depends_on:
+      - controller-1
+      - controller-2
+      - controller-3
+    volumes:
+      - ./secrets:/etc/kafka/secrets
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - '8090:8080'
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=OrderSystemCluster
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker-1:19092,broker-2:19092,broker-3:19092
+      - DYNAMIC_CONFIG_ENABLED=true
+      - KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL=SSL
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_TYPE=JKS
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_LOCATION=/etc/kafka/secrets/kafka.truststore.jks
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_TRUSTSTORE_PASSWORD=password123
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_TYPE=JKS
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_LOCATION=/etc/kafka/secrets/ui.keystore.jks
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEYSTORE_PASSWORD=password123
+      - KAFKA_CLUSTERS_0_PROPERTIES_SSL_KEY_PASSWORD=password123
+    depends_on:
+      - broker-1
+      - broker-2
+      - broker-3
+    volumes:
+      - ./secrets:/etc/kafka/secrets
+
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: orders_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./secrets:/tmp/secrets
+    command: >
+      sh -c "
+      cp /tmp/secrets/postgres.* /var/lib/postgresql/ &&
+      cp /tmp/secrets/ca.crt /var/lib/postgresql/ &&
+      chown postgres:postgres /var/lib/postgresql/postgres.* /var/lib/postgresql/ca.crt &&
+      chmod 0600 /var/lib/postgresql/postgres.key &&
+      exec docker-entrypoint.sh postgres 
+      -c ssl=on 
+      -c ssl_cert_file=/var/lib/postgresql/postgres.crt 
+      -c ssl_key_file=/var/lib/postgresql/postgres.key 
+      -c ssl_ca_file=/var/lib/postgresql/ca.crt
+      "
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-ui
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: password123
+    ports:
+      - '8081:80'
+    volumes:
+      - ./secrets:/home/pgadmin/.postgresql:ro
+    depends_on:
+      - postgres-db
+  producer-api:
+    build:
+      context: ./producer
+    container_name: go-producer
+    ports:
+      - '8080:8080'
+    environment:
+      - KAFKA_BROKERS=broker-1:19092,broker-2:19092,broker-3:19092
+      - SSL_CERT_FILE=/etc/kafka/secrets/go-client.crt
+      - SSL_KEY_FILE=/etc/kafka/secrets/go-client.key
+      - SSL_CA_FILE=/etc/kafka/secrets/ca.crt
+    volumes:
+      - ./producer:/app
+      - ./secrets:/etc/kafka/secrets
+    depends_on:
+      - broker-1
+      - broker-2
+      - broker-3
+
+  consumer-worker:
+    build:
+      context: ./consumer
+    container_name: go-consumer
+    environment:
+      - KAFKA_BROKERS=broker-1:19092,broker-2:19092,broker-3:19092
+      - DATABASE_URL=postgres://admin:password123@postgres-db:5432/orders_db?sslmode=disable
+      - SSL_CERT_FILE=/etc/kafka/secrets/go-client.crt
+      - SSL_KEY_FILE=/etc/kafka/secrets/go-client.key
+      - SSL_CA_FILE=/etc/kafka/secrets/ca.crt
+    volumes:
+      - ./consumer:/app
+      - ./secrets:/etc/kafka/secrets
+    depends_on:
+      - broker-1
+      - broker-2
+      - broker-3
+      - postgres-db
+
+volumes:
+  pgdata:
