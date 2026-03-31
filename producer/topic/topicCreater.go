@@ -69,7 +69,7 @@ func InitKafkaTopic() {
 		if err == nil {
 			break
 		}
-		fmt.Printf("⏳ Kafka not ready yet... retrying in 3 seconds (Attempt %d/7)\n", i)
+		fmt.Printf("Kafka not ready yet... retrying in 3 seconds (Attempt %d/7)\n", i)
 		time.Sleep(3 * time.Second)
 	}
 
