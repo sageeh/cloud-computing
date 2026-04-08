@@ -79,6 +79,7 @@ func main() {
 		DualStack: true,
 		TLS:       getTLSConfig(),
 	}
+
 	reader := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:  GetBrokers(),
 		GroupID:  "order-processor-group",
