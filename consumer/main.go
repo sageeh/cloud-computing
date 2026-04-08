@@ -89,7 +89,7 @@ func main() {
 	})
 	defer reader.Close()
 
-	fmt.Println("🎧 Secure Consumer started. Listening for orders on encrypted cluster...")
+	fmt.Println("Secure Consumer started. Listening for orders on encrypted cluster...")
 
 	// 3. The Infinite Processing Loop
 	for {
